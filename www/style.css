@@ -1,0 +1,91 @@
+body {
+	padding : 2%;
+	background-color: #fffcf8;
+}
+
+.div_head{
+	width : 1200;
+	margin: 0 auto;
+	padding-left: 3%;
+}
+
+.div_main{
+	width : 1200;
+	margin: 0 auto;
+}
+
+h3 {
+	border-bottom: 2px solid #d8d8d8;
+	padding: 6px 4px;
+}
+
+.item {
+	padding : 1%;
+	margin-left : 3%;
+}
+
+table {
+	width: 98%;
+	margin: 0 auto;
+	text-align: center;
+	border-collapse: collapse;
+	border:1px solid #a0a0a0;
+}
+
+table tr td{
+	padding : 5px;
+}
+table tr th{
+	padding : 8px;
+	background-color : #f7f5f3;
+	color : #585858;
+}
+
+#folderCreateTable input { width:94%; }
+
+table tr th , table tr td {
+	border:1px solid #a0a0a0;
+	max-width: 600px;
+	min-width: 45px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	border-color: transparent;
+	border-top-color: #c5c5c5;
+	border-bottom-color: #c5c5c5;
+}
+
+.tag { margin-bottom: 15px; }
+
+button {
+	cursor:pointer;
+	padding: 1px 12px;
+}
+
+.item_body {
+	padding: 5px 22px;
+}
+
+input[type=text] , button {
+	height: 24px;
+	border-radius: 5px;
+	outline: none;
+	border-top-style: groove;
+	border-right-style: groove;
+	border-bottom-style: groove;
+	border-left-style: groove;
+	border: 1px solid #a1a1a1;
+	padding: 0px 10px;
+}
+
+progress{
+	display: block;
+	margin-top: 16px;
+	width: 30%;
+}
+
+input[type='checkbox']{
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    outline: none;
+}

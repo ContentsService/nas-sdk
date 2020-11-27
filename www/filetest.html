@@ -1,0 +1,91 @@
+test
+
+<h3> 파일 업로드 : </h3>
+<div class="item_body">
+	<form name="formUpload" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="token" value="<?= $AUTH -> token ?>">
+		<span>태그 : </span>
+		<input type="text" name="tag" class="tag" value="original,free">
+		<div>
+			<input type="file" name="files[]"  id="filesFile" multiple="multiple">
+		</div>
+	</form>
+	<button  type="button" name="btnUpload">업로드 시작</button>
+	<progress name="progressBar" value="0" max="100"> </progress>
+	<span class="time"></span>
+</div>
+
+<script>
+
+let upload = document.getElementsByName('btnUpload')[0] ;
+
+upload.addEventListener( 'click' , (e)=>{
+	let form = new FormData();
+	for(var pair of form.entries()) {
+	   console.log('파일 넣기 전',pair[0], pair[1]); 
+	}
+	// 선택한 파일 데이터
+	let fileInput = document.getElementById('filesFile').files;
+	for ( let i = 0 ; i < fileInput.length ; i++ )
+	{
+		let file = new File(fileInput , fileInput[i].name,{type:fileInput[i].type});
+		form.append('files[]',file);
+	}
+
+
+	for(var pair of form.entries()) {
+	   console.log('파일 입력 후',pair[0], pair[1]); 
+	}
+	console.log('ddd')
+});
+
+
+
+</script>
+
+<!--
+
+안녕하세요, 유선으로 먼저 말씀드린 후 문의글 남겨드립니다.
+
+여러 접근 방식을 시도하였고 현재는 PHP SDK 코드를 참고하여
+최대한 현재 코드와 비슷하게 작성하였습니다.
+
+아래 payload 는 파라미터이며 input[type=file] DOM 의 files 영역이 주입되어 있습니다.
+
+
+# FormData 부분
+let formData = null;
+
+for (let i = 0; i < payload.length; i++) {
+    const a = new File(payload, payload[i].name, {
+        type: payload[i].type
+    });
+    console.log(a);
+    state.formData.append('files[]', a);
+
+    // OR
+    // state.formData.append('files', payload[i]);
+}
+
+# 호출 부분
+axios
+  .post('api/v1/files/15wbpk9Tk29rgmUbfIt9006Q8LhIcS03', formData, {
+      headers: {
+          Authorization: state.token,
+         // 'Content-Type': 'multipart/form-data;'
+      }
+})
+
+위와 같은 내용으로
+Authorization 헤더와 함께
+POST /api/v1/files/15wbpk9Tk29rgmUbfIt9006Q8LhIcS03 로 호출하였고
+아래와 같은 응답이 반환되고 있습니다.
+
+"503 / Path not found / 파일 경로 검색시 오류가 발생하였습니다. 관리자에게 문의해주시기 바랍니다."
+
+파일 선택과 파일 업로드와 같이 파일관련 API 에 서 문제가 발생하는 것으로 확인됩니다.
+
+확인 후 연락 부탁드립니다. 감사합니다.
+
+
+-->

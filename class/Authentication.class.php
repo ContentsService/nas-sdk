@@ -96,12 +96,13 @@ class Authentication
 		curl_setopt ( $curl , CURLOPT_REFERER , $_SERVER['SERVER_NAME'] ) ; //client 서버 도메인
 		if ( $action == 'POST' )
 		{
-			$o = '' ;
-			foreach ( $postData as $k => $v )
-			{
-				$o .= "$k=" . urlencode ( $v ) . "&" ;
-			}
-			$postData = substr ( $o , 0 , -1 ) ;
+			$filesend = false ;
+			foreach ( $postData as $v )
+				if ( get_class($v) == 'CURLFile' )
+					$filesend = true;
+
+			if ( ! $filesend )
+				$postData = http_build_query($postData);
 			curl_setopt ( $curl , CURLOPT_POST , 1 ) ;
 			curl_setopt ( $curl , CURLOPT_POSTFIELDS , $postData ) ;
 		}
@@ -137,6 +138,57 @@ class Authentication
 		}
 		else
 			echo "<script>alert('인증 토큰 생성시 오류가 발생했습니다.');</script>" ;
+	}
+
+
+	/*
+	 * 파일 업로드
+	 * @param string $file 파일 경로
+	 * @param string $folderKey 파일이 업로드될 폴더 키
+	 * @param string $token 토큰
+	 * @return array 파일 전송 결과
+	 */
+	public function upload ( $file , $folderKey = '' , $token = '' )
+	{
+		$data = array();
+		if ( is_array ( $file ) )
+		{
+			foreach ( $file as $k => $v )
+				if ( is_file ( $v ) )
+				{
+					$name = explode ( '/' , $v ) ;
+					$name = array_pop ( $name ) ;
+					$data['files['.$k.']'] = curl_file_create ( $v , mime_content_type ( $v ) , base64_encode ( urlencode ( $name ) ) ) ;
+				}
+		}
+		else
+		{
+			if ( is_file ( $file ) )
+			{
+				$name = explode ( '/' , $file ) ;
+				$name = array_pop ( $name ) ;
+				$data['files[0]'] = curl_file_create( $file , mime_content_type ( $file ) , base64_encode ( urlencode ( $name ) ) ) ;
+			}
+		}
+
+		if ( empty ( $data ) )
+			return 'No file';
+
+		$_folderKey = $folderKey ? $folderKey : ($this -> folderKey ? $this -> folderKey : '' ) ;
+		if ( empty ( $_folderKey ) )
+			return 'No folderKey';
+
+		$_token = $token ? $token : ($this -> token ? $this -> token : '' ) ;
+		if ( ! $_token )
+			return 'No token' ;
+
+		$key = $folderKey ? $folderKey : ($this -> folderKey ? $this -> folderKey : NULL ) ;
+		if ( ! $key )
+			return 'No token key' ;
+
+		$headers[] = 'Authorization:' . $_token ;
+		$re = self::curl ( self::$filesUrl . $_folderKey , $headers , 'POST' , $data ) ;
+		return $this -> returnMsg ( $re , __FUNCTION__ ) ; // $re -> files
 	}
 
 

@@ -114,7 +114,7 @@ $title = 'Files - Demo' ;
 					<span>태그 : </span>
 					<input type="text" name="tag" class="tag" value="original,free">
 					<div>
-						<input type="file" name="files[]"  id="filesFile" multiple="multiple" >
+						<input type="file" name="files[]"  id="filesFile" multiple="multiple">
 					</div>
 				</form>
 				<button  type="button" name="btnUpload">업로드 시작</button>
@@ -199,6 +199,7 @@ $ ( document ).ready ( function () {
 		// 업로드 파일 이름 encode
 		var fileSend = new File ( fileInput , btoa(encodeURIComponent(fileInput[0].name)) , { type : fileInput[0].type } );
 		var form = new FormData ( document.getElementsByName ( "formUpload" )[0] ) ;
+
 		form.delete('files[]');
 		form.append('files[]',fileSend);
 
